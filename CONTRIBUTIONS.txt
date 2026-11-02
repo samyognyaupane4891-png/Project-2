@@ -1,0 +1,8 @@
+Smart Campus Navigation - Milestone 1
+
+Team Members:
+- Samyog Nyaupane (Member A): Facility records, custom hash table, ID search, category report.
+- Siddhanta Tripathi (Member B): Campus graph, BFS reachability, shortest path, connectivity report.
+- Aayush Shrestha (Member C): Department tree, traversals, department statistics.
+
+Shared Work: File loading utilities, menu system, testing, and documentation.
