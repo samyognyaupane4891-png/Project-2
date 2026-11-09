@@ -235,7 +235,11 @@ int main(int argc, char* argv[]) {
         std::cout << "\n--- Milestone 1 Menu ---\n";
         std::cout << "1. View all facilities\n";
         std::cout << "2. Search facility by ID\n";
-        // Add options 3, 4, and 5 
+        std::cout << "3. View campus graph\n";
+        std::cout << "4. Display graph counts and degrees\n";
+        std::cout << "5. Find reachable buildings (BFS)\n";
+
+       
         std::cout << "6. Add department\n";
         std::cout << "7. Search department by name\n";
         std::cout << "8. Display department hierarchy\n";
