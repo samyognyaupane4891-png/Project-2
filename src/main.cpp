@@ -7,6 +7,7 @@
 #include <cctype>
 #include "Facility.h"
 #include "HashTable.h"
+#include "CampusGraph.h"
 
 
 std::string trim(const std::string& str) {
@@ -25,6 +26,70 @@ std::vector<std::string> split(const std::string& line, char delimiter) {
         tokens.push_back(trim(token)); // Trim spaces from each field
     }
     return tokens;
+}
+
+void loadBuildings(const std::string& directory, CampusGraph& graph) {
+    std::string filepath = directory + "/buildings.txt";
+    std::ifstream file(filepath);
+    if (!file.is_open()) {
+        std::cerr << "Error: Could not open " << filepath << "\n";
+        return;
+    }
+
+    std::string line;
+    int lineNumber = 0, accepted = 0, rejected = 0;
+    while (std::getline(file, line)) {
+        lineNumber++;
+        std::string trimmedLine = trim(line);
+        if (trimmedLine.empty() || trimmedLine[0] == '#') continue;
+
+        if (graph.addBuilding(trimmedLine)) {
+            accepted++;
+        } else {
+            std::cout << "Warning: buildings.txt line " << lineNumber << " rejected (duplicate name).\n";
+            rejected++;
+        }
+    }
+    std::cout << "buildings.txt: " << accepted << " accepted, " << rejected << " rejected\n";
+}
+
+// Load Connections
+void loadConnections(const std::string& directory, CampusGraph& graph) {
+    std::string filepath = directory + "/connections.txt";
+    std::ifstream file(filepath);
+    if (!file.is_open()) {
+        std::cerr << "Error: Could not open " << filepath << "\n";
+        return;
+    }
+
+    std::string line;
+    int lineNumber = 0, accepted = 0, rejected = 0;
+    while (std::getline(file, line)) {
+        lineNumber++;
+        std::string trimmedLine = trim(line);
+        if (trimmedLine.empty() || trimmedLine[0] == '#') continue;
+
+        std::vector<std::string> fields = split(line, '|');
+        if (fields.size() != 2) {
+            std::cout << "Warning: connections.txt line " << lineNumber << " rejected (invalid format).\n";
+            rejected++;
+            continue;
+        }
+
+        if (!graph.hasBuilding(fields[0]) || !graph.hasBuilding(fields[1])) {
+            std::cout << "Warning: connections.txt line " << lineNumber << " rejected (unknown building).\n";
+            rejected++;
+            continue;
+        }
+
+        if (graph.addConnection(fields[0], fields[1])) {
+            accepted++;
+        } else {
+            std::cout << "Warning: connections.txt line " << lineNumber << " rejected (duplicate or self-connection).\n";
+            rejected++;
+        }
+    }
+    std::cout << "connections.txt: " << accepted << " accepted, " << rejected << " rejected\n";
 }
 
 // Member A: Load Facilities
@@ -155,8 +220,10 @@ int main(int argc, char* argv[]) {
 
     HashTable facilityTable(50); // HASH-5: Initial capacity 
     
-    // Sid put your work here
-    
+    // sidd work
+    CampusGraph campusGraph;
+    loadBuildings(dataDir, campusGraph);
+    loadConnections(dataDir, campusGraph);
     loadFacilities(dataDir, facilityTable);
     
     // Aayush's Tree loading work please put here buddy
@@ -214,6 +281,26 @@ int main(int argc, char* argv[]) {
                 found.display();
             } else {
                 std::cout << "Not found: " << upperSearchId << "\n";
+            }
+        } else if (choice == 3) {
+            campusGraph.displayGraph();
+        } else if (choice == 4) {
+            campusGraph.displayCountsAndDegrees();
+        } else if (choice == 5) {
+            std::string startBuilding;
+            std::cout << "Enter start building: ";
+
+            // Clearing out any leftover newline characters from previous input
+            std::cin.ignore(10000, '\n');
+
+            // Using getline to allow spaces in building names
+            std::getline(std::cin, startBuilding);
+            startBuilding = trim(startBuilding);
+
+            if (startBuilding.empty()) {
+                std::cout << "Error: Building name cannot be blank.\n";
+            } else {
+                campusGraph.bfsReachability(startBuilding);
             }
         } else if (choice == 0) {
             std::cout << "Exiting...\n";

@@ -6,4 +6,6 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 include_directories(include)
 file(GLOB SOURCES "src/*.cpp")
-add_executable(campus ${SOURCES})
+add_executable(campus ${SOURCES}
+        include/CampusGraph.h
+        src/CampusGraph.cpp)
