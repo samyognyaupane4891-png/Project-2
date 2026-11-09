@@ -1,3 +1,4 @@
+#include "DepartmentTree.h"
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -166,6 +167,50 @@ void loadFacilities(const std::string& directory, HashTable& hashTable) {
               << ", collisions " << hashTable.getCollisions() << ")\n";
 }
 
+
+// Load Departments
+void loadDepartments(const std::string& directory, DepartmentTree& tree) {
+    std::string filepath = directory + "/departments.txt";
+    std::ifstream file(filepath);
+    if (!file.is_open()) {
+        std::cerr << "Error: Could not open " << filepath << "\n";
+        return;
+    }
+
+    std::string line;
+    int lineNumber = 0, accepted = 0, rejected = 0;
+    while (std::getline(file, line)) {
+        lineNumber++;
+        std::string trimmedLine = trim(line);
+        if (trimmedLine.empty() || trimmedLine[0] == '#') continue;
+
+        std::vector<std::string> fields = split(line, '|');
+        if (fields.size() != 2) {
+            std::cout << "Warning: departments.txt line " << lineNumber << " rejected (invalid format).\n";
+            rejected++;
+            continue;
+        }
+
+        std::string name = fields[0];
+        std::string parentName = fields[1];
+
+        if (name.empty() || parentName.empty()) {
+            std::cout << "Warning: departments.txt line " << lineNumber << " rejected (empty field).\n";
+            rejected++;
+            continue;
+        }
+
+        if (tree.addDepartment(name, parentName)) {
+            accepted++;
+        } else {
+            std::cout << "Warning: departments.txt line " << lineNumber << " rejected (duplicate name or unknown parent).\n";
+            rejected++;
+        }
+    }
+    std::cout << "departments.txt: " << accepted << " accepted, " << rejected << " rejected\n";
+}
+
+
 int main(int argc, char* argv[]) {
 
     std::string dataDir = "data";
@@ -182,6 +227,8 @@ int main(int argc, char* argv[]) {
     loadFacilities(dataDir, facilityTable);
     
     // Aayush's Tree loading work please put here buddy
+    DepartmentTree departmentTree;
+    loadDepartments(dataDir, departmentTree);
 
     int choice = -1;
     while (choice != 0) {
@@ -192,6 +239,13 @@ int main(int argc, char* argv[]) {
         std::cout << "4. Display graph counts and degrees\n";
         std::cout << "5. Find reachable buildings (BFS)\n";
 
+       
+        std::cout << "6. Add department\n";
+        std::cout << "7. Search department by name\n";
+        std::cout << "8. Display department hierarchy\n";
+        std::cout << "9. Display departments in preorder\n";
+       
+        
         std::cout << "0. Exit\n";
         std::cout << "Enter choice: ";
         
@@ -254,6 +308,60 @@ int main(int argc, char* argv[]) {
             }
         } else if (choice == 0) {
             std::cout << "Exiting...\n";
+
+           
+        } 
+        
+        //Aayush's options 6-9 below
+        else if (choice == 6) {
+            std::cin.ignore(10000, '\n'); 
+            if (departmentTree.isEmpty()) {
+                std::cout << "Tree is empty. Enter root department name: ";
+                std::string rootName;
+                std::getline(std::cin, rootName);
+                rootName = trim(rootName);
+                
+                if (rootName.empty()) {
+                    std::cout << "Error: Name cannot be blank.\n";
+                } else if (departmentTree.addDepartment(rootName, "NONE")) {
+                    std::cout << "Root department added successfully.\n";
+                }
+            } else {
+                std::cout << "Enter new department name: ";
+                std::string name;
+                std::getline(std::cin, name);
+                
+                std::cout << "Enter existing parent department name: ";
+                std::string parent;
+                std::getline(std::cin, parent);
+                
+                name = trim(name);
+                parent = trim(parent);
+                
+                if (name.empty() || parent.empty()) {
+                    std::cout << "Error: Name and parent cannot be blank.\n";
+                } else if (departmentTree.addDepartment(name, parent)) {
+                    std::cout << "Department added successfully.\n";
+                } else {
+                    std::cout << "Error: Duplicate department name or unknown parent.\n";
+                }
+            }
+        } else if (choice == 7) {
+            std::string searchName;
+            std::cout << "Enter department name to search: ";
+            std::cin.ignore(10000, '\n');
+            std::getline(std::cin, searchName);
+            searchName = trim(searchName);
+            
+            if (searchName.empty()) {
+                std::cout << "Error: Name cannot be blank.\n";
+            } else if (!departmentTree.searchDepartment(searchName)) {
+                std::cout << "Department not found.\n";
+            }
+        } else if (choice == 8) {
+            departmentTree.displayHierarchy();
+        } else if (choice == 9) {
+            departmentTree.displayPreorder();
         } else {
             std::cout << "Option not implemented yet or out of range.\n";
         }
