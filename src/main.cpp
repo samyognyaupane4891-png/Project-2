@@ -188,7 +188,10 @@ int main(int argc, char* argv[]) {
         std::cout << "\n--- Milestone 1 Menu ---\n";
         std::cout << "1. View all facilities\n";
         std::cout << "2. Search facility by ID\n";
-        // Options 3-9 will be added by Sid and Aayush
+        std::cout << "3. View campus graph\n";
+        std::cout << "4. Display graph counts and degrees\n";
+        std::cout << "5. Find reachable buildings (BFS)\n";
+
         std::cout << "0. Exit\n";
         std::cout << "Enter choice: ";
         
