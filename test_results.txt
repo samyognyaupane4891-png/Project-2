@@ -1,0 +1,92 @@
+
+Test 1
+Description: Load facilities.txt at launch.
+Input: Program launch.
+Expected: Rejects malformed/duplicate lines. Accepts valid ones. Summary prints correctly.
+Actual: Load summary matched expectations (10 accepted, 0 rejected initially).
+Result: Pass
+
+Test 2
+Description: View all facilities (Option 1).
+Input: Menu Option 1.
+Expected: Displays all loaded facilities in array order.
+Actual: Correctly printed all facilities to the console.
+Result: Pass
+
+Test 3
+Description: Valid ID Search (Option 2).
+Input: Menu Option 2 -> "F004".
+Expected: Displays "Computer Lab A".
+Actual: Successfully located and displayed the correct facility.
+Result: Pass
+
+Test 4
+Description: Lowercase ID Search (Option 2).
+Input: Menu Option 2 -> "f004".
+Expected: Converts to uppercase and displays "Computer Lab A".
+Actual: Successfully matched despite lowercase input.
+Result: Pass
+
+Test 5
+Description: Invalid Format Search (Option 2).
+Input: Menu Option 2 -> "004".
+Expected: Displays "Invalid format" error.
+Actual: Safely rejected the malformed ID and returned to menu.
+Result: Pass
+
+Test 6
+Description: Not Found Search (Option 2).
+Input: Menu Option 2 -> "F999".
+Expected: Displays "Not found: F999".
+Actual: Correctly reported the facility was not in the table.
+Result: Pass
+
+Test 7
+Description: Hash Collision Handling.
+Input: Modified facilities.txt with an ID designed to map to an identical index.
+Expected: Separate chaining appends it to the vector; collision counter increases.
+Actual: Load summary reflected the collision, and both items remained searchable.
+Result: Pass
+
+
+Test 8
+Description: Load buildings.txt and connections.txt.
+Input: Program launch.
+Expected: Valid lines accepted, duplicates rejected. Summary prints correctly.
+Actual: Load summaries matched expectations. Rejects handled safely.
+Result: Pass
+
+Test 9
+Description: View Graph (Option 3).
+Input: Menu Option 3.
+Expected: Displays each building and its comma-separated neighbors.
+Actual: Output matched exactly, validating the adjacency list.
+Result: Pass
+
+Test 10
+Description: BFS Reachability (Option 5).
+Input: Menu Option 5 -> "Science Building".
+Expected: Accurately calculates reachable count and distances from the start node.
+Actual: BFS correctly traversed the graph, avoiding cycles, and displayed distances.
+Result: Pass
+
+Test 11
+Description: Load departments.txt.
+Input: Program launch.
+Expected: Parses parent-child relationships, builds tree, rejects unknowns.
+Actual: Matches expected load summary.
+Result: Pass
+
+Test 12
+Description: Display Hierarchy (Option 8).
+Input: Menu Option 8.
+Expected: Prints indented tree structure matching file relationships.
+Actual: Output matched exactly.
+Result: Pass
+
+Test 13
+Description: Search Department (Option 7).
+Input: Menu Option 7 -> valid and invalid department names.
+Expected: Successfully finds existing departments and reports missing ones.
+Actual: Recursive search successfully verified node existence.
+Result: Pass

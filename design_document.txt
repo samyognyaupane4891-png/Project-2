@@ -1,0 +1,44 @@
+(Samyog Nyaupane):
+1. Main Classes:
+   - Facility: Stores facility ID, name, building, and category.
+   - HashTable: Implements a custom hash table using separate chaining
+   (an array of std::vector) to handle collisions.
+
+2. Loading & Validation:
+   Parses facilities.txt using custom split and trim helper functions.
+   Validates that IDs are exactly formatted as 'F' followed by 3 digits,
+   rejecting invalid formats, missing fields, or duplicate IDs.
+
+3. Core Logic:
+   The hash function sums the ASCII values of the characters in the uppercase ID,
+   then takes the modulo of the capacity (50). The search function converts user
+   input to uppercase to ensure case-insensitive lookups.
+
+(Siddhanta Tripathi): Campus Graph Design
+1. Main Classes:
+   - CampusGraph: Manages campus locations and paths using an adjacency list.
+   - Building struct: Acts as a node, storing the building name, an uppercase
+   version for fast case-insensitive lookups, and a std::vector of neighbor strings.
+
+2. Loading & Validation:
+   Validates buildings first, then connections. Connections between unknown buildings,
+    duplicates, or self-loops are safely rejected. Case-insensitive string matching
+    ensures robust edge creation regardless of user input capitalization.
+
+3. BFS Algorithm:
+   Uses a std::queue to explore the campus level by level. It tracks visited nodes
+   with a boolean array and calculates distance by incrementing the current building's
+   distance before enqueuing neighbors.
+
+(Aayush Shrestha):
+1. Main Classes:
+   - DepartmentTree & DepartmentNode: Implemented as a general (N-ary) tree where each
+    node holds its name and a std::vector of pointers to its child nodes.
+
+2. Tree Construction:
+   Supports dynamic insertion. If the tree is empty, a root is added. Otherwise, new
+   departments are attached to an existing parent node via a recursive search.
+
+3. Traversals:
+   Uses recursive traversals for searching (finding a parent node) and displaying the
+   hierarchy (using dynamic spacing/indentation to visually represent depth).
